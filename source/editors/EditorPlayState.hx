@@ -18,9 +18,6 @@ import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import openfl.events.KeyboardEvent;
-#if android
-import ui.Mobilecontrols;
-#end
 import FunkinLua;
 
 using StringTools;
@@ -44,9 +41,7 @@ class EditorPlayState extends MusicBeatState
 	var startOffset:Float = 0;
 	var startPos:Float = 0;
 
-	#if android
-	var mcontrols:Mobilecontrols; 
-	#end
+	
 
 	public function new(startPos:Float) {
 		this.startPos = startPos;
@@ -160,20 +155,8 @@ class EditorPlayState extends MusicBeatState
 		FlxG.mouse.visible = false;
 
 		#if android
-			mcontrols = new Mobilecontrols();
-			switch (mcontrols.mode)
-			{
-				case VIRTUALPAD_RIGHT | VIRTUALPAD_LEFT | VIRTUALPAD_CUSTOM:
-					controls.setVirtualPadNOTES(mcontrols._virtualPad, FULL, NONE);
-				case HITBOX:
-					controls.setHitBoxNOTES(mcontrols._hitbox);
-				default:
-			}
-			trackedinputsNOTES = controls.trackedinputsNOTES;
-			controls.trackedinputsNOTES = [];
-
-			add(mcontrols);
-		#end	
+		addAndroidControls();
+		#end
 
 		//sayGo();
 		if(!ClientPrefs.controllerMode)

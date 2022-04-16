@@ -9,6 +9,7 @@ import vlc.VlcBitmap;
 #elseif android
 import extension.webview.WebView;
 import android.AndroidTools;
+#else
 #end
 import flixel.FlxBasic;
 import flixel.FlxG;

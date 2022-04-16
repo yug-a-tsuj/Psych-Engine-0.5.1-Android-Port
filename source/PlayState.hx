@@ -52,9 +52,6 @@ import StageData;
 import FunkinLua;
 import DialogueBoxPsych;
 import lime.app.Application;
-#if android
-import ui.Mobilecontrols;
-#end
 
 #if sys
 import sys.FileSystem;
@@ -246,10 +243,6 @@ class PlayState extends MusicBeatState
 	var storyDifficultyText:String = "";
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
-	#end
-
-        #if android
-	var mcontrols:Mobilecontrols; 
 	#end
 
 	//Achievement shit

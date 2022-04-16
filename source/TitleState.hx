@@ -84,9 +84,9 @@ class TitleState extends MusicBeatState
 
 		#if MODS_ALLOWED
 		// Just to load a mod on start up if ya got one. For mods that change the menu music and bg
-		if (FileSystem.exists(Main.getDataPath() + "modsList.txt")){
+		if (FileSystem.exists(SUtil.getPath() + "modsList.txt")){
 			
-			var list:Array<String> = CoolUtil.listFromString(File.getContent(Main.getDataPath() + "modsList.txt"));
+			var list:Array<String> = CoolUtil.listFromString(File.getContent(SUtil.getPath() + "modsList.txt"));
 			var foundTheTop = false;
 			for (i in list){
 				var dat = i.split("|");
@@ -100,14 +100,14 @@ class TitleState extends MusicBeatState
 		#end
 		
 		#if MODS_ALLOWED
-		var path = Main.getDataPath() + "mods/" + Paths.currentModDirectory + "/images/gfDanceTitle.json";
+		var path = SUtil.getPath() + "mods/" + Paths.currentModDirectory + "/images/gfDanceTitle.json";
 		//trace(path, FileSystem.exists(path));
 		if (!FileSystem.exists(path)) {
-			path = Main.getDataPath() + "mods/images/gfDanceTitle.json";
+			path = SUtil.getPath() + "mods/images/gfDanceTitle.json";
 		}
 		//trace(path, FileSystem.exists(path));
 		if (!FileSystem.exists(path)) {
-			path = Main.getDataPath() + "assets/images/gfDanceTitle.json";
+			path = SUtil.getPath() + "assets/images/gfDanceTitle.json";
 		}
 		//trace(path, FileSystem.exists(path));
 		titleJSON = Json.parse(File.getContent(path));
@@ -267,14 +267,14 @@ class TitleState extends MusicBeatState
 		
 		
 		#if MODS_ALLOWED
-		var path = Main.getDataPath() + "mods/" + Paths.currentModDirectory + "/images/logoBumpin.png";
+		var path = SUtil.getPath() + "mods/" + Paths.currentModDirectory + "/images/logoBumpin.png";
 		//trace(path, FileSystem.exists(path));
 		if (!FileSystem.exists(path)){
-			path = Main.getDataPath() + "mods/images/logoBumpin.png";
+			path = SUtil.getPath() + "mods/images/logoBumpin.png";
 		}
 		//trace(path, FileSystem.exists(path));
 		if (!FileSystem.exists(path)){
-			path = Main.getDataPath() + "assets/images/logoBumpin.png";
+			path = SUtil.getPath() + "assets/images/logoBumpin.png";
 		}
 		//trace(path, FileSystem.exists(path));
 		logoBl.frames = FlxAtlasFrames.fromSparrow(BitmapData.fromFile(path),File.getContent(StringTools.replace(path,".png",".xml")));
@@ -294,14 +294,14 @@ class TitleState extends MusicBeatState
 			gfDance = new FlxSprite(titleJSON.gfx, titleJSON.gfy);
 		
 		#if MODS_ALLOWED
-		var path = Main.getDataPath() + "mods/" + Paths.currentModDirectory + "/images/gfDanceTitle.png";
+		var path = SUtil.getPath() + "mods/" + Paths.currentModDirectory + "/images/gfDanceTitle.png";
 		//trace(path, FileSystem.exists(path));
 		if (!FileSystem.exists(path)){
-			path = Main.getDataPath() + "mods/images/gfDanceTitle.png";
+			path = SUtil.getPath() + "mods/images/gfDanceTitle.png";
 		//trace(path, FileSystem.exists(path));
 		}
 		if (!FileSystem.exists(path)){
-			path = Main.getDataPath() + "assets/images/gfDanceTitle.png";
+			path = SUtil.getPath() + "assets/images/gfDanceTitle.png";
 		//trace(path, FileSystem.exists(path));
 		}
 		gfDance.frames = FlxAtlasFrames.fromSparrow(BitmapData.fromFile(path),File.getContent(StringTools.replace(path,".png",".xml")));
@@ -320,14 +320,14 @@ class TitleState extends MusicBeatState
 
 		titleText = new FlxSprite(titleJSON.startx, titleJSON.starty);
 		#if MODS_ALLOWED
-		var path = Main.getDataPath() + "mods/" + Paths.currentModDirectory + "/images/titleEnter.png";
+		var path = SUtil.getPath() + "mods/" + Paths.currentModDirectory + "/images/titleEnter.png";
 		//trace(path, FileSystem.exists(path));
 		if (!FileSystem.exists(path)){
-			path = Main.getDataPath() + "mods/images/titleEnter.png";
+			path = SUtil.getPath() + "mods/images/titleEnter.png";
 		}
 		//trace(path, FileSystem.exists(path));
 		if (!FileSystem.exists(path)){
-			path = Main.getDataPath() + "assets/images/titleEnter.png";
+			path = SUtil.getPath() + "assets/images/titleEnter.png";
 		}
 		//trace(path, FileSystem.exists(path));
 		titleText.frames = FlxAtlasFrames.fromSparrow(BitmapData.fromFile(path),File.getContent(StringTools.replace(path,".png",".xml")));

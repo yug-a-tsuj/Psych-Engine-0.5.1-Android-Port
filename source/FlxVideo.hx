@@ -3,12 +3,12 @@ import openfl.net.NetConnection;
 import openfl.net.NetStream;
 import openfl.events.NetStatusEvent;
 import openfl.media.Video;
-#else
-import openfl.events.Event;
-import vlc.VlcBitmap;
 #elseif android
 import extension.webview.WebView;
 import android.AndroidTools;
+#else
+import openfl.events.Event;
+import vlc.VlcBitmap;
 #end
 import flixel.FlxBasic;
 import flixel.FlxG;

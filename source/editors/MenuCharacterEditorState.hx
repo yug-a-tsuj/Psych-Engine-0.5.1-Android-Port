@@ -406,7 +406,6 @@ class MenuCharacterEditorState extends MusicBeatState
 		var data:String = Json.stringify(characterFile, "\t");
 		if (data.length > 0)
 		{
-			#if desktop
 			var splittedImage:Array<String> = imageInputText.text.trim().split('_');
 			var characterName:String = splittedImage[splittedImage.length-1].toLowerCase().replace(' ', '');
 

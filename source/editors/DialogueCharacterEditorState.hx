@@ -148,8 +148,9 @@ class DialogueCharacterEditorState extends MusicBeatState
 		updateCharTypeBox();
 		
 		#if android
-		addVirtualPad(FULL, A_B);
-	        #end
+		addVirtualPad(FULL, FULL);
+                addPadCamera();
+                #end
 		
 		super.create();
 	}
@@ -597,11 +598,12 @@ class DialogueCharacterEditorState extends MusicBeatState
 				}
 			}
 
-			if (FlxG.keys.pressed.Q && camGame.zoom > 0.1) {
+			if (FlxG.keys.pressed.Q  #if android || _virtualpad.buttonX.pressed #end  && camGame.zoom > 0.1) {
 				camGame.zoom -= elapsed * camGame.zoom;
 				if(camGame.zoom < 0.1) camGame.zoom = 0.1;
 			}
-			if (FlxG.keys.pressed.E && camGame.zoom < 1) {
+			if (FlxG.keys.pressed.E  #if android || _virtualpad.buttonY.pressed #end && camGame.zoom < 1) {
+
 				camGame.zoom += elapsed * camGame.zoom;
 				if(camGame.zoom > 1) camGame.zoom = 1;
 			}
@@ -651,7 +653,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 				currentGhosts = 0;
 			}
 
-			if(FlxG.keys.justPressed.ESCAPE#if android || FlxG.android.justReleased.BACK #end) {
+			if(FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justReleased.BACK #end) {
 				MusicBeatState.switchState(new editors.MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
 				transitioning = true;

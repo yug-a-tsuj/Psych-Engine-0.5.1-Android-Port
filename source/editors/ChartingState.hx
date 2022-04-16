@@ -390,10 +390,10 @@ class ChartingState extends MusicBeatState
         add(key_shift);
 
         #if android
-		addVirtualPad(FULL, A_B);
-		#end
+	addVirtualPad(FULL, A_B_X_Y);
+	#end
 
-		super.create();
+	super.create();
 	}
 
 	var check_mute_inst:FlxUICheckBox = null;
@@ -1604,7 +1604,7 @@ class ChartingState extends MusicBeatState
 				}
 			}
 
-			if (FlxG.keys.justPressed.SPACE#if mobile || key_space.justPressed#end)
+			if (FlxG.keys.justPressed.SPACE #if android || _virtualpad.buttonX.justPressed #end)
 			{
 				if (FlxG.sound.music.playing)
 				{
@@ -1670,7 +1670,7 @@ class ChartingState extends MusicBeatState
 			
 			var style = currentType;
 			
-			if (FlxG.keys.pressed.SHIFT #if mobile || key_shift.pressed #end){
+			if (FlxG.keys.pressed.SHIFT #if android || _virtualpad.buttonY.pressed #end){
 				style = 3;
 			}
 			
@@ -1788,7 +1788,7 @@ class ChartingState extends MusicBeatState
 			}
 			}
 			var shiftThing:Int = 1;
-			if (FlxG.keys.pressed.SHIFT #if mobile || key_shift.pressed #end)
+			if (FlxG.keys.pressed.SHIFT  #if android || _virtualpad.buttonY.pressed #end)
 				shiftThing = 4;
 
 			if (FlxG.keys.justPressed.RIGHT && !vortex|| FlxG.keys.justPressed.D #if mobile || _virtualpad.buttonRight.justPressed #end)

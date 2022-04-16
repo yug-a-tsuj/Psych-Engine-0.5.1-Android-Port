@@ -8,11 +8,7 @@ import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
-#if MOBILE_CONTROLS_ALLOWED //only android will use those
-import sys.FileSystem;
-import lime.app.Application;
-import lime.system.System;
-#end
+
 
 class Main extends Sprite
 {
@@ -29,13 +25,13 @@ class Main extends Sprite
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public static function main():Void
-	{
 		Lib.current.addChild(new Main());
 	}
 
 	public function new()
 	{
 		super();
+		SUtil.gameCrashCheck();
 
 		if (stage != null)
 		{
@@ -47,22 +43,7 @@ class Main extends Sprite
 		}
 	}
 
-	static public function getDataPath():String 
-    {
-    	#if MOBILE_CONTROLS_ALLOWED
-        if (dataPath != null && dataPath.length > 0) 
-        {
-                return dataPath;
-        } 
-        else 
-        {
-            dataPath = "/storage/emulated/0/Android/data/" + Application.current.meta.get("packageName") + "/files/";         
-        }
-        return dataPath;
-        #else
-        dataPath = "";//to prevent crashing
-        #end
-    }
+
 
 	private function init(?E:Event):Void
 	{
@@ -92,30 +73,8 @@ class Main extends Sprite
 		initialState = TitleState;
 		#end
 
-        #if MOBILE_CONTROLS_ALLOWED
-        if (!FileSystem.exists("/storage/emulated/0/Android/data/" + Application.current.meta.get("packageName")))
-        {
-            Application.current.window.alert("Try creating A folder Called " + Application.current.meta.get("packageName") + " in Android/data/" + "\n" + "Press Ok To Close The App", "Check Directory Error");
-            System.exit(0);//Will close the game
-        }
-        else if (!FileSystem.exists("/storage/emulated/0/Android/data/" + Application.current.meta.get("packageName") + "/files/"))
-        {
-            Application.current.window.alert("Try creating A folder Called Files in Android/data/" + Application.current.meta.get("packageName") + "\n" + "Press Ok To Close The App", "Check Directory Error");
-            System.exit(0);//Will close the game
-        }
-        else if (!FileSystem.exists(SUtil.getPath() + "assets"))
-        {
-            Application.current.window.alert("Try copying assets/assets from apk to " + " /storage/emulated/0/Android/data/" + Application.current.meta.get("packageName") + "/files/" + "\n" + "Press Ok To Close The App", "Check Directory Error");
-            System.exit(0);//Will close the game
-        }
-        else if (!FileSystem.exists(SUtil.getPath() + "mods"))
-        {
-            Application.current.window.alert("Try copying assets/mods from apk to " + " /storage/emulated/0/Android/data/" + Application.current.meta.get("packageName") + "/files/" + "\n" + "Press Ok To Close The App", "Check Directory Error");
-            System.exit(0);//Will close the game
-        }
-        #end
-
 		ClientPrefs.loadDefaultKeys();
+		SUtil.doTheCheck();
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
 
 		fpsVar = new FPS(10, 3, 0xFFFFFF);

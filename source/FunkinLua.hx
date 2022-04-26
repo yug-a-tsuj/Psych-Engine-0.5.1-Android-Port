@@ -24,7 +24,7 @@ import openfl.display.BlendMode;
 import openfl.utils.Assets;
 import flixel.math.FlxMath;
 import flixel.addons.transition.FlxTransitionableState;
-#if sys
+#if MODS_ALLOWED
 import sys.FileSystem;
 import sys.io.File;
 #end
@@ -167,6 +167,8 @@ class FunkinLua {
 		set('noResetButton', ClientPrefs.noReset);
 		set('lowQuality', ClientPrefs.lowQuality);
 
+		#if MODS_ALLOWED
+
 		Lua_helper.add_callback(lua, "addLuaScript", function(luaFile:String, ?ignoreAlreadyRunning:Bool = false) { //would be dope asf. 
 			var cervix = luaFile + ".lua";
 			var doPush = false;
@@ -198,7 +200,7 @@ class FunkinLua {
 			}
 			luaTrace("Script doesn't exist!");
 		});
-
+		#end
 		//stuff 4 noobz like you B)
 		
 		
@@ -1135,7 +1137,8 @@ class FunkinLua {
 		Lua_helper.add_callback(lua, "getRandomBool", function(chance:Float = 50) {
 			return FlxG.random.bool(chance);
 		});
-		Lua_helper.add_callback(lua, "startDialogue", function(dialogueFile:String, music:String = null) {
+
+/*		Lua_helper.add_callback(lua, "startDialogue", function(dialogueFile:String, music:String = null) {
 			var path:String = Paths.modsJson(Paths.formatToSongPath(PlayState.SONG.song) + '/' + dialogueFile);
 			if(!FileSystem.exists(path)) {
 				path = Paths.json(Paths.formatToSongPath(PlayState.SONG.song) + '/' + dialogueFile);
@@ -1159,6 +1162,7 @@ class FunkinLua {
 				}
 			}
 		});
+*/
 		Lua_helper.add_callback(lua, "startVideo", function(videoFile:String) {
 			#if VIDEOS_ALLOWED
 			if(FileSystem.exists(Paths.video(videoFile))) {

@@ -234,11 +234,11 @@ class Paths
 	
 	static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String
 	{
-		#if sys
+//		#if sys
 		#if MODS_ALLOWED
 		if (!ignoreMods && FileSystem.exists(mods(key)))
 			return File.getContent(mods(key));
-		#end
+//		#end
 
 		if (FileSystem.exists(SUtil.getPath() + getPreloadPath(key)))
 			return File.getContent(SUtil.getPath() + getPreloadPath(key));

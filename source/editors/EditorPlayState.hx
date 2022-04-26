@@ -125,7 +125,7 @@ class EditorPlayState extends MusicBeatState
 			}
 		} gotta fix this soon 
 		#end
-/*
+*/
 		noteTypeMap.clear();
 		noteTypeMap = null;
 

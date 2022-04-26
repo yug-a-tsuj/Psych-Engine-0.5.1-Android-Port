@@ -703,7 +703,7 @@ class PlayState extends MusicBeatState
 		}
 
 
-		// "GLOBAL" SCRIPTS
+/*		// "GLOBAL" SCRIPTS
 		#if LUA_ALLOWED
 		var filesPushed:Array<String> = [];
 		var foldersToCheck:Array<String> = [SUtil.getPath() + Paths.getPreloadPath('scripts/')];
@@ -727,9 +727,9 @@ class PlayState extends MusicBeatState
 					}
 				}
 			}
-		}
+		} gotta fix this soon 
 		#end
-		
+*/		
 
 		// STAGE SCRIPTS
 		#if (MODS_ALLOWED && LUA_ALLOWED)

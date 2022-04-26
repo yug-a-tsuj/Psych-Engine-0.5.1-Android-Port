@@ -53,7 +53,7 @@ import FunkinLua;
 import DialogueBoxPsych;
 import lime.app.Application;
 
-#if sys
+#if MODS_ALLOWED
 import sys.FileSystem;
 #end
 
@@ -1696,7 +1696,7 @@ class PlayState extends MusicBeatState
 
 		var songName:String = Paths.formatToSongPath(SONG.song);
 		var file:String = SUtil.getPath() + Paths.json(songName + '/events');
-		#if sys
+		#if MODS_ALLOWED
 		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file)) {
 		#else
 		if (OpenFlAssets.exists(file)) {

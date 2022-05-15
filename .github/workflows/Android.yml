@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: krdlab/setup-haxe@v1
         with:
-          haxe-version: 4.2.3
+          haxe-version: 4.2.5
           
       - name: Cache haxelib path
         uses: actions/cache@v2
@@ -38,7 +38,7 @@ jobs:
         
       - uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r15c
+          ndk-version: r23b
 
       # Runs a set of commands using the runners shell
       - name: Installing Packages
@@ -62,7 +62,7 @@ jobs:
           haxelib git polymod https://github.com/MasterEric/polymod.git --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc --quiet
           haxelib git linc_luajit https://github.com/Daninnocent/linc_luajit.git --quiet
-          haxelib git extension-webview https://github.com/Daninnocent/extension-webview.git --quiet      
+          haxelib git extension-videoview https://github.com/jigsaw-4277821/extension-videoview.git --quiet      
           haxelib git extension-androidtools https://github.com/jigsaw-4277821/extension-androidtools.git
           haxelib list
           

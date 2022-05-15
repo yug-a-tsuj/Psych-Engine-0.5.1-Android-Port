@@ -53,7 +53,7 @@ import FunkinLua;
 import DialogueBoxPsych;
 import lime.app.Application;
 
-#if MODS_ALLOWED
+#if sys
 import sys.FileSystem;
 #end
 
@@ -703,7 +703,7 @@ class PlayState extends MusicBeatState
 		}
 
 
-/*		// "GLOBAL" SCRIPTS
+		// "GLOBAL" SCRIPTS
 		#if LUA_ALLOWED
 		var filesPushed:Array<String> = [];
 		var foldersToCheck:Array<String> = [SUtil.getPath() + Paths.getPreloadPath('scripts/')];
@@ -727,9 +727,9 @@ class PlayState extends MusicBeatState
 					}
 				}
 			}
-		} gotta fix this soon 
+		}
 		#end
-*/		
+		
 
 		// STAGE SCRIPTS
 		#if (MODS_ALLOWED && LUA_ALLOWED)
@@ -747,15 +747,6 @@ class PlayState extends MusicBeatState
 
 		if(doPush) 
 			luaArray.push(new FunkinLua(luaFile));
-		#elseif LUA_ALLOWED
-		var doPush:Bool = false;
-                var luaFile:String = 'stages/' + curStage + '.lua';
-                luaFile = Paths.getPreloadPath(luaFile);                        
-		if(OpenFlAssets.exists(luaFile)) {
-                        doPush = true;
-                }
-		if(doPush)
-                        luaArray.push(new FunkinLua(Asset2File.getPath(luaFile)));
 		#end
 
 		if(!modchartSprites.exists('blammedLightsBlack')) { //Creates blammed light black fade in case you didn't make your own
@@ -908,7 +899,7 @@ class PlayState extends MusicBeatState
 		// startCountdown();
 
 		generateSong(SONG.song);
-		#if (LUA_ALLOWED && MODS_ALLOWED)
+		#if LUA_ALLOWED
 		for (notetype in noteTypeMap.keys())
 		{
 			var luaToLoad:String = Paths.modFolders('custom_notetypes/' + notetype + '.lua');
@@ -941,21 +932,6 @@ class PlayState extends MusicBeatState
 				}
 			}
 		}
-		#else
-		for (notetype in noteTypeMap.keys()) {
-                        var luaToLoad:String = 'custom_notetypes/' + notetype + '.lua';
-                    luaToLoad = Paths.getPreloadPath(luaToLoad);
-                        if(OpenFlAssets.exists(luaToLoad)) {
-                                luaArray.push(new FunkinLua(Asset2File.getPath(luaToLoad)));
-                        }
-                }
-                for (event in eventPushedMap.keys()) {
-                        var luaToLoad:String = 'custom_events/' + event + '.lua';
-                        luaToLoad = Paths.getPreloadPath(luaToLoad);    
-			if(OpenFlAssets.exists(luaToLoad)) {
-                                luaArray.push(new FunkinLua(Asset2File.getPath(luaToLoad)));
-                        }
-                }
 		#end
 		noteTypeMap.clear();
 		noteTypeMap = null;
@@ -1067,17 +1043,32 @@ class PlayState extends MusicBeatState
 
 
 		// SONG SPECIFIC SCRIPTS
-		// STAGE SCRIPTS
-                var doPush:Bool = false;
-                var luaFile:String = Paths.getPreloadPath('/data/' + Paths.formatToSongPath(SONG.song) + '/');
-                luaFile = Paths.getPreloadPath(luaFile);                      
-		if(OpenFlAssets.exists(luaFile)) {
-                        doPush = true;
-                }
-		
-		if(doPush)
-                        luaArray.push(new FunkinLua(Asset2File.getPath(luaFile)));
+		#if LUA_ALLOWED
+		var filesPushed:Array<String> = [];
+		var foldersToCheck:Array<String> = [SUtil.getPath() + Paths.getPreloadPath('data/' + Paths.formatToSongPath(SONG.song) + '/')];
 
+		#if MODS_ALLOWED
+		foldersToCheck.insert(0, Paths.mods('data/' + Paths.formatToSongPath(SONG.song) + '/'));
+		if(Paths.currentModDirectory != null && Paths.currentModDirectory.length > 0)
+			foldersToCheck.insert(0, Paths.mods(Paths.currentModDirectory + '/data/' + Paths.formatToSongPath(SONG.song) + '/'));
+		#end
+
+		for (folder in foldersToCheck)
+		{
+			if(FileSystem.exists(folder))
+			{
+				for (file in FileSystem.readDirectory(folder))
+				{
+					if(file.endsWith('.lua') && !filesPushed.contains(file))
+					{
+						luaArray.push(new FunkinLua(folder + file));
+						filesPushed.push(file);
+					}
+				}
+			}
+		}
+		#end
+		
 		var daSong:String = Paths.formatToSongPath(curSong);
 		if (isStoryMode && !seenCutscene)
 		{
@@ -1139,9 +1130,6 @@ class PlayState extends MusicBeatState
 				case 'senpai' | 'roses' | 'thorns':
 					if(daSong == 'roses') FlxG.sound.play(Paths.sound('ANGRY'));
 					schoolIntro(doof);
-								
-				case 'bopeebo':
-					startVideo('testVideo');
 
 				default:
 					startCountdown();
@@ -1259,7 +1247,7 @@ class PlayState extends MusicBeatState
 
 	function startCharacterLua(name:String)
 	{
-		#if (LUA_ALLOWED && MODS_ALLOWED)
+		#if LUA_ALLOWED
 		var doPush:Bool = false;
 		var luaFile:String = 'characters/' + name + '.lua';
 		if(FileSystem.exists(Paths.modFolders(luaFile))) {
@@ -1280,15 +1268,6 @@ class PlayState extends MusicBeatState
 			}
 			luaArray.push(new FunkinLua(luaFile));
 		}
-		#elseif LUA_ALLOWED
-		var doPush:Bool = false;
-                var luaFile:String = 'characters/' + name + '.lua';
-                luaFile = Paths.getPreloadPath(luaFile);
-                if(OpenFlAssets.exists(luaFile)) {
-                        doPush = true;
-                }
-		if(doPush)
-                        luaArray.push(new FunkinLua(Asset2File.getPath(luaFile)));
 		#end
 	}
 
@@ -1301,29 +1280,52 @@ class PlayState extends MusicBeatState
 		char.y += char.positionArray[1];
 	}
 
-	public function startVideo(name:String, ?isCutscene:Bool = true):Void {
-		var fileName:String = "assets/videos/" + name;
-    
-		var bg:FlxSprite;
-		bg = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
-		bg.scrollFactor.set();
-		bg.cameras = [camHUD];
-		add(bg);
-
-		(new FlxVideo(fileName)).finishCallback = function() {
-			remove(bg);
-			startAndEnd();
+	public function startVideo(name:String):Void {
+		#if VIDEOS_ALLOWED
+		var foundFile:Bool = false;
+		var fileName:String = #if MODS_ALLOWED Paths.modFolders('videos/' + name); #else ''; #end
+		#if sys
+		if(FileSystem.exists(fileName)) {
+			foundFile = true;
 		}
-		if (isCutscene)
-		startAndEnd();
-	}
+		#end
 
-	function startAndEnd()
-	{
-		if(endingSong)
+		if(!foundFile) {
+			fileName = Paths.video(name);
+			#if sys
+			if(FileSystem.exists(fileName)) {
+			#else
+			if(OpenFlAssets.exists(fileName)) {
+			#end
+				foundFile = true;
+			}
+		}
+
+		if(foundFile) {
+			inCutscene = true;
+			var bg = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
+			bg.scrollFactor.set();
+			bg.cameras = [camHUD];
+			add(bg);
+
+			(new FlxVideo(fileName)).finishCallback = function() {
+				remove(bg);
+				if(endingSong) {
+					endSong();
+				} else {
+					startCountdown();
+				}
+			}
+			return;
+		} else {
+			FlxG.log.warn('Couldnt find video file: ' + fileName);
+		}
+		#end
+		if(endingSong) {
 			endSong();
-		else
+		} else {
 			startCountdown();
+		}
 	}
 
 	var dialogueCount:Int = 0;
@@ -1694,7 +1696,7 @@ class PlayState extends MusicBeatState
 
 		var songName:String = Paths.formatToSongPath(SONG.song);
 		var file:String = SUtil.getPath() + Paths.json(songName + '/events');
-		#if MODS_ALLOWED
+		#if sys
 		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file)) {
 		#else
 		if (OpenFlAssets.exists(file)) {

@@ -20,8 +20,6 @@ using StringTools;
 class Paths
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
-	
-	inline public static var VIDEO_EXT = "";
 
 	#if MODS_ALLOWED
 	#if (haxe >= "4.0.0")
@@ -142,7 +140,7 @@ class Paths
 			return file;
 		}
 		#end
-		return 'assets/videos/$key';
+		return SUtil.getPath() + 'assets/videos/$key';
 	}
 
 	static public function sound(key:String, ?library:String):Dynamic
@@ -234,11 +232,11 @@ class Paths
 	
 	static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String
 	{
-//		#if sys
+		#if sys
 		#if MODS_ALLOWED
 		if (!ignoreMods && FileSystem.exists(mods(key)))
 			return File.getContent(mods(key));
-//		#end
+		#end
 
 		if (FileSystem.exists(SUtil.getPath() + getPreloadPath(key)))
 			return File.getContent(SUtil.getPath() + getPreloadPath(key));
@@ -347,7 +345,7 @@ class Paths
 	}
 
 	inline static public function modsVideo(key:String) {
-		return modFolders('videos/' + key + '.' + VIDEO_EXT);
+		return modFolders('videos/' + key);
 	}
 
 	inline static public function modsMusic(key:String) {

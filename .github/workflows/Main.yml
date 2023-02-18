@@ -1,13 +1,21 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Build
+name: Android Build
 
-# Controls when the action will run.
-on: [push,pull_request,workflow_dispatch]
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-# A workflow run is made up of one or 69 jobs that can run sequentially or in parallel
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow dsoent contain a single job called "build"
+  # This workflow contains a single job called "build"
   buildAndroid:
     name: buildAndroid
     runs-on: ubuntu-latest
@@ -36,20 +44,24 @@ jobs:
 
       - name: Install Haxelib
         run: |
-          haxelib setup ~/haxelib
-          haxelib install hxcpp > /dev/null
-          haxelib install lime
-          haxelib install openfl
-          haxelib --never install flixel
-          haxelib run lime setup flixel
-          haxelib install flixel-tools
-          haxelib install flixel-ui
-          haxelib install hscript
-          haxelib install flixel-addons
-          haxelib install hxCodec
-          haxelib git linc_luajit https://github.com/jigsaw-4277821/linc_luajit.git
+          mkdir -p "%HAXELIB_ROOT%"
+          haxelib setup "%HAXELIB_ROOT%"
+          haxelib install lime 7.9.0 --quiet
+          haxelib install openfl --quiet
+          haxelib install flixel 4.9.0 --quiet
+          haxelib install hxcpp --quiet
+          haxelib install flixel-tools --quiet
+          haxelib install flixel-ui --quiet
+          haxelib install flixel-addons 2.10.0 --quiet
+          haxelib install hscript --quiet
+          haxelib git faxe https://github.com/uhrobots/faxe --quiet
+          haxelib git polymod https://github.com/larsiusprime/polymod.git
+          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc --quiet
+          haxelib git extension-webm https://github.com/Sirox228/extension-webm --quiet
           haxelib git extension-androidtools https://github.com/randomxdp/extension-androidtools.git
           haxelib git extension-videoview https://github.com/jigsaw-4277821/extension-videoview.git
+          haxelib git linc_luajit https://github.com/Daninnocent/linc_luajit.git --quiet
+          haxelib install actuate 
           haxelib list
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
@@ -70,5 +82,5 @@ jobs:
       - name: Publish Artifact
         uses: actions/upload-artifact@v2.2.4
         with:
-          name: androidBuild
+          name: Android Build
           path: export/release/android/bin/app/build/outputs/apk/debug

@@ -99,7 +99,8 @@ class Paths
 
 	inline static function getLibraryPathForce(file:String, library:String)
 	{
-		return '$library:assets/$library/$file';
+		var returnPath = '$library:assets/$library/$file';
+		return returnPath;
 	}
 
 	inline public static function getPreloadPath(file:String = '')
